@@ -9,14 +9,14 @@ import time
 server1_name = "yingjunw@dev1.db.pdl.cmu.local"
 server2_name = "yingjunw@dev2.db.pdl.cmu.local"
 
-oltp_home = "~/oltpbench"
-peloton_bin= = ""
+oltp_home = "~/rxian/oltpbench"
+peloton_bin = "~/rxian/bin/bin"
 
 parameters = {
 "$IP":  "localhost",
 "$PORT": "57721",
 "$SCALE_FACTOR": "1",
-"$TIME":  "10",
+"$TIME":  "300",
 "$THREAD_NUMBER": "1",
 "$READ_RATIO": "0",
 "$INSERT_RATIO": "0",
@@ -30,9 +30,9 @@ cwd = os.getcwd()
 config_filename = "peloton_ycsb_config.xml"
 start_cleanup_script = "rm -rf callgrind.out.*"
 start_peloton_valgrind_script = "valgrind --tool=callgrind --trace-children=yes peloton -D ./data > /dev/null 2>&1 &"
-start_peloton_script = "peloton -D ./data > /dev/null 2>&1 &"
-stop_peloton_script = "pg_ctl -D ./data stop"
-start_ycsb_bench_script = "./oltpbenchmark -b ycsb -c " + cwd + "/" + config_filename + " --create=true --load=true --execute=true -s 5 -o %s/outputfile" % (cwd)
+start_peloton_script = "%s/peloton -D ./data > /dev/null 2>&1 &" % (peloton_bin)
+stop_peloton_script = "%s/pg_ctl -D ./data stop" % (peloton_bin)
+start_ycsb_bench_script = "%s/oltpbenchmark -b ycsb -c " % (oltp_home) + cwd + "/" + config_filename + " --create=true --load=true --execute=true -s 5 -o %s/outputfile" % (cwd)
 
 def prepare_parameters(thread_num, read_ratio, insert_ratio, update_ratio):
     os.chdir(cwd)
