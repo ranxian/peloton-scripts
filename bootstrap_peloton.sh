@@ -1,17 +1,21 @@
 #!/bin/sh
 
+NUM_CORE=16
 # Clean up any existing peloton data directory
 rm -rf data
 
+pwd=`pwd`
 # Rebuild and install
-make -j4
+cd $PELOTON_HOME/build/
+make -j$NUM_CORE
 sudo make install
+cd $pwd
 
 # Setup new peloton data directory
 initdb data
 
 # Copy over the peloton configuration file into the directory
-cp ../scripts/oltpbenchmark/postgresql.conf data
+sed 's/peloton_logging_mode aries/peloton_logging_mode invalid/g' $PELOTON_HOME/scripts/oltpbenchmark/postgresql.conf > data/postgresql.conf
 
 # Kill any existing peloton processes
 pkill -9 peloton
@@ -21,10 +25,10 @@ pg_ctl -D data stop
 rm data/pg_log/peloton.log
 
 # Start the peloton server
-pg_ctl -D data start
+peloton -D ./data & # > /dev/null 2>&1 &
 
 # Wait for a moment for the server to start up...
-sleep 1
+sleep 5
 
 # Create a "postgres" user
 createuser -r -s postgres
@@ -36,3 +40,6 @@ createdb $USER
 
 echo "create database ycsb;" | psql postgres
 echo "create database tpcc;" | psql postgres
+
+echo "Peloton prepared"
+pg_ctl -D ./data stop

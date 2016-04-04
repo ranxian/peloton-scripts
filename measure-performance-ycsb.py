@@ -31,7 +31,7 @@ start_cleanup_script = "rm -rf callgrind.out.*"
 start_peloton_valgrind_script = "valgrind --tool=callgrind --trace-children=yes peloton -D ./data > /dev/null 2>&1 &"
 start_peloton_script = "peloton -D ./data > /dev/null 2>&1 &"
 stop_peloton_script = "pg_ctl -D ./data stop"
-start_ycsb_bench_script = "./oltpbenchmark -b ycsb -c " + cwd + "/" + config_filename + " --create=true --load=false --execute=true -s 5 -o outputfile"
+start_ycsb_bench_script = "./oltpbenchmark -b ycsb -c " + cwd + "/" + config_filename + " --create=true --load=true --execute=true -s 5 -o %s/outputfile" % (cwd)
 
 def prepare_parameters(thread_num, read_ratio, insert_ratio, update_ratio):
     os.chdir(cwd)
@@ -46,7 +46,7 @@ def prepare_parameters(thread_num, read_ratio, insert_ratio, update_ratio):
         ycsb_template = ycsb_template.replace(param, parameters[param])
     with open(config_filename, "w") as out_file:
         out_file.write(ycsb_template)
-        
+
 def start_peloton_valgrind():
     os.chdir(cwd)
     os.system(stop_peloton_script)
@@ -84,7 +84,8 @@ if __name__ == "__main__":
     insert_ratio = 0
     update_ratio = 100
     start_peloton()
-    for thread_num in range(1, 7):
-        prepare_parameters(thread_num, read_ratio, insert_ratio, update_ratio)
-        start_bench(thread_num, read_ratio, insert_ratio, update_ratio)
+#    for thread_num in range(1, 7):
+    thread_num = 3
+    prepare_parameters(thread_num, read_ratio, insert_ratio, update_ratio)
+    start_bench(thread_num, read_ratio, insert_ratio, update_ratio)
     stop_peloton()
