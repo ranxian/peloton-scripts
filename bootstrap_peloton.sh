@@ -1,6 +1,7 @@
 #!/bin/sh
 
 NUM_CORE=16
+PELOTON_HOME=$PELOTON_HOME
 # Clean up any existing peloton data directory
 rm -rf data
 

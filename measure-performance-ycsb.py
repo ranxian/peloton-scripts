@@ -10,6 +10,7 @@ server1_name = "yingjunw@dev1.db.pdl.cmu.local"
 server2_name = "yingjunw@dev2.db.pdl.cmu.local"
 
 oltp_home = "~/oltpbench"
+peloton_bin= = ""
 
 parameters = {
 "$IP":  "localhost",
