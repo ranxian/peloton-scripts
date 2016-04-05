@@ -16,7 +16,7 @@ parameters = {
 "$IP":  "localhost",
 "$PORT": "57721",
 "$SCALE_FACTOR": "1",
-"$TIME":  "300",
+"$TIME":  "10",
 "$THREAD_NUMBER": "1",
 "$READ_RATIO": "0",
 "$INSERT_RATIO": "0",
@@ -29,7 +29,7 @@ parameters = {
 cwd = os.getcwd()
 config_filename = "peloton_ycsb_config.xml"
 start_cleanup_script = "rm -rf callgrind.out.*"
-start_peloton_valgrind_script = "valgrind --tool=callgrind --trace-children=yes peloton -D ./data > /dev/null 2>&1 &"
+start_peloton_valgrind_script = "valgrind --tool=callgrind --trace-children=yes %s/peloton -D ./data > /dev/null 2>&1 &" % (peloton_bin)
 start_peloton_script = "%s/peloton -D ./data > /dev/null 2>&1 &" % (peloton_bin)
 stop_peloton_script = "%s/pg_ctl -D ./data stop" % (peloton_bin)
 start_ycsb_bench_script = "%s/oltpbenchmark -b ycsb -c " % (oltp_home) + cwd + "/" + config_filename + " --create=true --load=true --execute=true -s 5 -o %s/outputfile" % (cwd)

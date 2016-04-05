@@ -10,6 +10,7 @@ pwd=`pwd`
 # Rebuild and install
 cd $PELOTON_HOME/build/
 make -j$NUM_CORE
+make install
 # sudo make install
 cd $pwd
 
